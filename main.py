@@ -1,16 +1,26 @@
-# This is a sample Python script.
+import gradio as gr
+from transformers import pipeline
+import numpy as np
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+transcriber = pipeline("automatic-speech-recognition", model="openai/whisper-base.en")
+
+def transcribe(stream, new_chunk):
+    sr, y = new_chunk
+    y = y.astype(np.float32)
+    y /= np.max(np.abs(y))
+
+    if stream is not None:
+        stream = np.concatenate([stream, y])
+    else:
+        stream = y
+    return stream, transcriber({"sampling_rate": sr, "raw": stream})["text"]
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+demo = gr.Interface(
+    transcribe,
+    ["state", gr.Audio(sources=["microphone"], streaming=True)],
+    ["state", "text"],
+    live=True,
+)
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+demo.launch()

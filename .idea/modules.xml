@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/speech-to-text.iml" filepath="$PROJECT_DIR$/.idea/speech-to-text.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/speech-to-text-modal.iml" filepath="$PROJECT_DIR$/.idea/speech-to-text-modal.iml" />
     </modules>
   </component>
 </project>
